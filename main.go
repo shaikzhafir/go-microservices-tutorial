@@ -13,14 +13,16 @@ import (
 func main() {
 	l := log.New(os.Stdout, "product-api", log.LstdFlags)
 	//each handler is returning the struct, which is like a route
-
+	//http handlers have a ServeHTTP method
 	hh := handlers.NewHello(l)
 	gb := handlers.NewGoodbye(l)
+	productsHandler := handlers.NewProducts(l)
 
 	//server multiplexer is the handler
 	sm := http.NewServeMux()
 	sm.Handle("/goodbye", gb)
 	sm.Handle("/", hh)
+	sm.Handle("/products", productsHandler)
 
 	//this is to prevent stuff like dos
 	s := &http.Server{
