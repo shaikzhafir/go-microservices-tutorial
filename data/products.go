@@ -1,6 +1,8 @@
 package data
 
 import (
+	"encoding/json"
+	"io"
 	"time"
 )
 
@@ -15,11 +17,19 @@ type Product struct {
 	DeletedOn   string
 }
 
+type Products []*Product
+
 //instead of putting the data extracting logic in handler,
 //place the abstraction here instead
 
-func GetProducts() []*Product {
+func GetProducts() Products {
 	return productList
+}
+
+//method to convert the products to JSON format
+func (p *Products) ToJSON(w io.Writer) error {
+	e := json.NewEncoder(w)
+	return e.Encode(p)
 }
 
 //an array with a pointer

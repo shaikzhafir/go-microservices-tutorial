@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"go-microservices-tutorial/data"
 	"log"
 	"net/http"
@@ -18,12 +17,21 @@ func NewProducts(l *log.Logger) *Products {
 func (p *Products) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	listOfProducts := data.GetProducts()
 
-	//convert products into JSON
-	data, err := json.Marshal(listOfProducts)
+	err := listOfProducts.ToJSON(rw)
+
 	if err != nil {
-		http.Error(rw, "unable to marshal JSON", http.StatusInternalServerError)
+		http.Error(rw, "unable to convert toJSON", http.StatusInternalServerError)
 	}
 
-	rw.Write(data)
+}
+
+//abstract out the conversion to JSON here
+func (p *Products) getProducts(rw http.ResponseWriter, r *http.Request) {
+	listOfProducts := data.GetProducts()
+	err := listOfProducts.ToJSON(rw)
+
+	if err != nil {
+		http.Error(rw, "unable to convert toJSON", http.StatusInternalServerError)
+	}
 
 }
