@@ -28,6 +28,8 @@ func GetProducts() Products {
 
 //method to convert the products to JSON format
 func (p *Products) ToJSON(w io.Writer) error {
+	//asume it saves the data into the write stream
+	//sets up the encoding type and using Write?
 	e := json.NewEncoder(w)
 	return e.Encode(p)
 }

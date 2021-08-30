@@ -15,13 +15,17 @@ func NewProducts(l *log.Logger) *Products {
 }
 
 func (p *Products) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
-	listOfProducts := data.GetProducts()
 
-	err := listOfProducts.ToJSON(rw)
-
-	if err != nil {
-		http.Error(rw, "unable to convert toJSON", http.StatusInternalServerError)
+	if r.Method == http.MethodGet {
+		//calls the getProducts method defined below
+		p.getProducts(rw, r)
+		return
 	}
+
+	//catch the errors, anything that does not fit GET will return error
+
+	//405 error
+	rw.WriteHeader(http.StatusMethodNotAllowed)
 
 }
 
